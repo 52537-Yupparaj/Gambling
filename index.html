@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega Fortune Casino Deluxe - 12 Reel Slot Machine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Kanit:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: radial-gradient(ellipse at center, #0a0a1a 0%, #1a0a2e 30%, #2d1b69 70%, #4a0e4e 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Enhanced animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 15% 15%, rgba(255, 215, 0, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(255, 0, 150, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 50% 20%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(150, 0, 255, 0.1) 0%, transparent 50%);
+            animation: backgroundShift 15s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        @keyframes backgroundShift {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+            100% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+        }
+        
+        .casino-title {
+            font-family: 'Cinzel', serif;
+            background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700, #ff6b35, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 400% 400%;
+            animation: titleGradient 4s ease-in-out infinite;
+            text-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+            filter: drop-shadow(0 0 15px #ffd700);
+        }
+        
+        @keyframes titleGradient {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 50% 100%; }
+            75% { background-position: 100% 0%; }
+        }
+        
+        .mega-slot-machine {
+            background: linear-gradient(145deg, #2d1b69, #1a1a2e, #0f0f23, #1a1a2e);
+            border: 8px solid;
+            border-image: linear-gradient(45deg, #ffd700, #ff6b35, #ffd700, #ff00ff, #ffd700) 1;
+            border-radius: 40px;
+            box-shadow: 
+                0 0 80px rgba(255, 215, 0, 0.5),
+                inset 0 0 80px rgba(255, 215, 0, 0.1),
+                0 30px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mega-slot-machine::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.15), transparent, rgba(255, 0, 255, 0.1), transparent);
+            animation: megaShimmer 6s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes megaShimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .reel-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 8px;
+            padding: 20px;
+        }
+        
+        .mega-reel-container {
+            background: linear-gradient(180deg, #1a1a2e, #0f0f23, #1a1a2e);
+            border: 3px solid #ffd700;
+            border-radius: 15px;
+            box-shadow: 
+                inset 0 0 25px rgba(0, 0, 0, 0.8),
+                0 0 15px rgba(255, 215, 0, 0.4);
+            overflow: hidden;
+            position: relative;
+            height: 120px;
+        }
+        
+        .mega-reel-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, 
+                rgba(255, 215, 0, 0.3) 0%, 
+                transparent 15%, 
+                transparent 85%, 
+                rgba(255, 215, 0, 0.3) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .mega-reel {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            background: linear-gradient(180deg, #2a2a3e, #1a1a2e, #2a2a3e);
+            position: relative;
+            transition: all 0.1s ease;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+        }
+        
+        .mega-reel.spinning {
+            animation: megaReelSpin 0.08s linear infinite;
+        }
+        
+        @keyframes megaReelSpin {
+            0% { transform: translateY(0) scale(1); }
+            33% { transform: translateY(-40px) scale(0.85); }
+            66% { transform: translateY(-80px) scale(0.9); }
+            100% { transform: translateY(-120px) scale(1); }
+        }
+        
+        .winning-mega-reel {
+            animation: megaWinGlow 1.2s ease-in-out infinite alternate;
+            transform: scale(1.08);
+            z-index: 5;
+        }
+        
+        @keyframes megaWinGlow {
+            from { 
+                box-shadow: 0 0 40px #ffd700, 0 0 60px #ffd700;
+                filter: brightness(1.3) saturate(1.5);
+            }
+            to { 
+                box-shadow: 0 0 60px #ffd700, 0 0 100px #ffd700, 0 0 140px #ffd700;
+                filter: brightness(1.8) saturate(2);
+            }
+        }
+        
+        .special-mega-mode {
+            background: linear-gradient(145deg, #2d1b69, #1a1a2e, #0f0f23, #1a1a2e) !important;
+            border-color: #8b5cf6 !important;
+            box-shadow: 
+                0 0 40px rgba(139, 92, 246, 0.4),
+                inset 0 0 40px rgba(139, 92, 246, 0.1),
+                0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+        
+        .special-mega-reel {
+            background: linear-gradient(180deg, #3a2a5e, #2a1a4e, #3a2a5e) !important;
+            color: #c4b5fd !important;
+            text-shadow: 0 0 15px rgba(196, 181, 253, 0.6) !important;
+        }
+        
+        .mega-control-panel {
+            background: linear-gradient(145deg, #2d1b69, #1a1a2e, #0f0f23, #1a1a2e);
+            border: 6px solid #ffd700;
+            border-radius: 30px;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.4);
+            position: relative;
+        }
+        
+        .mega-bet-chip {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 14px;
+            border: 4px solid;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        .mega-bet-chip::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            transition: all 0.4s ease;
+            transform: translate(-50%, -50%);
+        }
+        
+        .mega-bet-chip:hover::before {
+            width: 120%;
+            height: 120%;
+        }
+        
+        .mega-bet-chip:hover {
+            transform: scale(1.15) rotate(15deg);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+        
+        .chip-1 { background: linear-gradient(45deg, #ffffff, #f3f4f6, #ffffff); color: #333; border-color: #d1d5db; }
+        .chip-5 { background: linear-gradient(45deg, #dc2626, #ef4444, #dc2626); border-color: #991b1b; }
+        .chip-10 { background: linear-gradient(45deg, #2563eb, #3b82f6, #2563eb); border-color: #1d4ed8; }
+        .chip-25 { background: linear-gradient(45deg, #16a34a, #22c55e, #16a34a); border-color: #15803d; }
+        .chip-50 { background: linear-gradient(45deg, #ea580c, #f97316, #ea580c); border-color: #9a3412; }
+        .chip-100 { background: linear-gradient(45deg, #7c3aed, #a855f7, #7c3aed); border-color: #6d28d9; }
+        
+        .mega-button {
+            background: linear-gradient(145deg, #dc2626, #ef4444, #dc2626, #b91c1c);
+            border: 4px solid #ffd700;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            padding: 15px 30px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+            font-family: 'Cinzel', serif;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            min-width: 160px;
+        }
+        
+        .mega-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            transition: left 0.8s ease;
+        }
+        
+        .mega-button:hover::before {
+            left: 100%;
+        }
+        
+        .mega-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+        
+        .mega-button:active {
+            transform: scale(0.98);
+        }
+        
+        .mega-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+
+        
+        .auto-spin-button {
+            background: linear-gradient(145deg, #7c3aed, #a855f7, #7c3aed, #6d28d9) !important;
+            border-color: #ffd700 !important;
+        }
+        
+        .auto-spin-button:hover {
+            box-shadow: 0 0 40px rgba(168, 85, 247, 0.8), 0 12px 24px rgba(0, 0, 0, 0.4) !important;
+        }
+        
+        .auto-spin-active {
+            animation: autoSpinPulse 1s ease-in-out infinite alternate;
+        }
+        
+        @keyframes autoSpinPulse {
+            from { 
+                box-shadow: 0 0 20px #a855f7; 
+                transform: scale(1);
+            }
+            to { 
+                box-shadow: 0 0 40px #a855f7, 0 0 60px #a855f7; 
+                transform: scale(1.02);
+            }
+        }
+        
+        .special-mega-spin-button {
+            background: linear-gradient(145deg, #8b5cf6, #a855f7, #8b5cf6, #7c3aed) !important;
+            border-color: #c4b5fd !important;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4), 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        .mega-money-display {
+            background: linear-gradient(145deg, #1a1a2e, #0f0f23, #1a1a2e);
+            border: 5px solid #ffd700;
+            border-radius: 25px;
+            padding: 20px 30px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #22c55e;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+            font-family: 'Cinzel', serif;
+            text-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+        }
+        
+        .mega-result-display {
+            background: linear-gradient(145deg, #1a1a2e, #0f0f23, #1a1a2e);
+            border: 5px solid #ffd700;
+            border-radius: 25px;
+            padding: 25px;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .mega-jackpot-animation {
+            animation: megaJackpot 1s ease-in-out infinite;
+            color: #ffd700;
+            text-shadow: 0 0 40px #ffd700;
+            transform-origin: center;
+        }
+        
+        @keyframes megaJackpot {
+            0%, 100% { transform: scale(1) rotate(-2deg); }
+            25% { transform: scale(1.1) rotate(1deg); }
+            50% { transform: scale(1.2) rotate(-1deg); }
+            75% { transform: scale(1.15) rotate(2deg); }
+        }
+        
+        .special-mega-mode-indicator {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, #8b5cf6, #a855f7, #8b5cf6);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            z-index: 15;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+            border: 2px solid rgba(196, 181, 253, 0.3);
+        }
+        
+        .auto-spin-indicator {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, #7c3aed, #a855f7, #7c3aed);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 1rem;
+            animation: autoSpinIndicator 1s ease-in-out infinite alternate;
+            z-index: 15;
+            box-shadow: 0 0 25px rgba(124, 58, 237, 0.6);
+        }
+        
+        @keyframes autoSpinIndicator {
+            from { 
+                box-shadow: 0 0 25px #7c3aed; 
+                transform: translateX(-50%) scale(1);
+            }
+            to { 
+                box-shadow: 0 0 50px #7c3aed; 
+                transform: translateX(-50%) scale(1.03);
+            }
+        }
+        
+        .mega-game-over-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        
+        .mega-game-over-content {
+            background: linear-gradient(145deg, #2d1b69, #1a1a2e, #4a0e4e);
+            border: 8px solid #ff0000;
+            border-radius: 40px;
+            padding: 40px;
+            text-align: center;
+            max-width: 600px;
+            animation: megaGameOverShake 0.6s ease-in-out infinite alternate;
+            box-shadow: 0 0 80px rgba(255, 0, 0, 0.6);
+        }
+        
+        @keyframes megaGameOverShake {
+            from { transform: rotate(-2deg) scale(1); }
+            to { transform: rotate(2deg) scale(1.03); }
+        }
+        
+        .mega-restart-btn {
+            background: linear-gradient(45deg, #22c55e, #16a34a, #22c55e);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        .mega-restart-btn:hover {
+            background: linear-gradient(45deg, #16a34a, #15803d, #16a34a);
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(34, 197, 94, 0.6), 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+        
+        .mega-payout-table {
+            background: linear-gradient(145deg, #1a1a2e, #0f0f23, #1a1a2e);
+            border: 4px solid #ffd700;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            color: white;
+        }
+        
+        .mega-payout-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.4);
+        }
+        
+        .mega-payout-row:last-child {
+            border-bottom: none;
+        }
+        
+        .mega-symbol-display {
+            font-size: 1.6rem;
+        }
+        
+        .mega-multiplier {
+            color: #22c55e;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+        
+        .mega-special-multiplier {
+            color: #ff00ff;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-shadow: 0 0 15px #ff00ff;
+            animation: megaSpecialMultiplierGlow 1s ease-in-out infinite alternate;
+        }
+        
+        @keyframes megaSpecialMultiplierGlow {
+            from { filter: brightness(1); }
+            to { filter: brightness(1.5); }
+        }
+        
+        .mega-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .mega-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ffd700;
+            border-radius: 50%;
+            animation: megaParticleFall 4s linear infinite;
+            box-shadow: 0 0 8px #ffd700;
+        }
+        
+        @keyframes megaParticleFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(50vh) rotate(180deg) scale(1.2);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+        
+        .mega-special-particle {
+            background: #ff00ff !important;
+            box-shadow: 0 0 12px #ff00ff !important;
+            animation: megaSpecialParticleFall 3s linear infinite;
+        }
+        
+        @keyframes megaSpecialParticleFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg) scale(1);
+                opacity: 1;
+                filter: hue-rotate(0deg);
+            }
+            50% {
+                transform: translateY(50vh) rotate(180deg) scale(1.5);
+                opacity: 0.9;
+                filter: hue-rotate(180deg);
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg) scale(1);
+                opacity: 0;
+                filter: hue-rotate(360deg);
+            }
+        }
+        
+        .stats-panel {
+            background: linear-gradient(145deg, #1a1a2e, #0f0f23);
+            border: 3px solid #ffd700;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        .stat-item {
+            margin: 8px 0;
+            font-size: 1rem;
+        }
+        
+        .stat-value {
+            color: #22c55e;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+        
+        .auto-spin-selector {
+            background: linear-gradient(145deg, #1a1a2e, #0f0f23);
+            border: 3px solid #7c3aed;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+        
+        .auto-spin-option {
+            background: linear-gradient(45deg, #7c3aed, #a855f7);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            margin: 3px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .auto-spin-option:hover {
+            background: linear-gradient(45deg, #6d28d9, #9333ea);
+            transform: scale(1.05);
+        }
+        
+        .auto-spin-option.selected {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #333;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mega Particles -->
+    <div class="mega-particles" id="megaParticles"></div>
+    
+    <!-- Header -->
+    <div class="text-center py-4">
+        <h1 class="casino-title text-5xl font-bold mb-3">🎰 MEGA FORTUNE CASINO DELUXE 🎰</h1>
+        <p class="text-white text-lg mb-3">Ultimate 12-Reel Slot Machine with Auto Spin & Buy Bonus</p>
+        <div class="mega-money-display inline-block">
+            💰 Balance: $<span id="playerMoney">100</span>
+        </div>
+    </div>
+
+    <!-- Main Game Area -->
+    <div class="max-w-full mx-auto px-4">
+        <div class="mega-slot-machine p-6 mb-4 relative" id="megaSlotMachine">
+            <!-- Special Mode Indicator -->
+            <div class="special-mega-mode-indicator hidden" id="specialMegaModeIndicator">
+                ⚡ MEGA SPECIAL BONUS MODE ⚡<br>
+                <span id="specialMegaSpinsLeft">7</span> MEGA SPINS REMAINING
+            </div>
+            
+            <!-- Auto Spin Indicator -->
+            <div class="auto-spin-indicator hidden" id="autoSpinIndicator">
+                🔄 AUTO SPIN: <span id="autoSpinsRemaining">0</span> REMAINING
+            </div>
+            
+            <!-- 12-Reel Grid -->
+            <div class="reel-grid">
+                <div class="mega-reel-container">
+                    <div id="reel1" class="mega-reel">🍒</div>
+                </div>
+                <div class="mega-reel-container">
+                    <div id="reel2" class="mega-reel">🍋</div>
+                </div>
+                <div class="mega-reel-container">
+                    <div id="reel3" class="mega-reel">🍊</div>
+                </div>
+                <div class="mega-reel-container">
+                    <div id="reel4" class="mega-reel">🍇</div>
+                </div>
+                <div class="mega-reel-container">
+                    <div id="reel5" class="mega-reel">⭐</div>
+                </div>
+                <div class="mega-reel-container">
+                    <div id="reel6" class="mega-reel">🔔</div>
+                </div>
+                <div class="mega-reel-container">
+                    <div id="reel7" class="mega-reel">💰</div>
+                </div>
+                <div class="mega-reel-container">
+                    <div id="reel8" class="mega-reel">🎯</div>
+                </div>
+                <div class="mega-reel-container">
+                    <div id="reel9" class="mega-reel">🎲</div>
+                </div>
+                <div class="mega-reel-container">
+                    <div id="reel10" class="mega-reel">🃏</div>
+                </div>
+                <div class="mega-reel-container">
+                    <div id="reel11" class="mega-reel">👑</div>
+                </div>
+                <div class="mega-reel-container">
+                    <div id="reel12" class="mega-reel">💎</div>
+                </div>
+            </div>
+            
+            <!-- Mega Control Panel -->
+            <div class="mega-control-panel p-6 mt-4">
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+                    <!-- Bet Selection -->
+                    <div class="text-center">
+                        <h3 class="text-white text-lg font-bold mb-4">💰 Select Bet</h3>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="mega-bet-chip chip-1" onclick="setBet(1)">$1</div>
+                            <div class="mega-bet-chip chip-5" onclick="setBet(5)">$5</div>
+                            <div class="mega-bet-chip chip-10" onclick="setBet(10)">$10</div>
+                            <div class="mega-bet-chip chip-25" onclick="setBet(25)">$25</div>
+                            <div class="mega-bet-chip chip-50" onclick="setBet(50)">$50</div>
+                            <div class="mega-bet-chip chip-100" onclick="setBet(100)">$100</div>
+                        </div>
+                        <div class="text-white mt-4 text-sm">
+                            Current: <span class="text-yellow-400 font-bold">$<span id="currentBet">1</span></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Controls -->
+                    <div class="text-center space-y-3">
+                        <button id="megaSpinButton" class="mega-button w-full" onclick="spinMegaReels()">
+                            🎰 MEGA SPIN! 🎰
+                        </button>
+                    </div>
+                    
+                    <!-- Auto Spin Controls -->
+                    <div class="text-center">
+                        <button id="autoSpinButton" class="mega-button auto-spin-button w-full" onclick="toggleAutoSpin()">
+                            🔄 AUTO SPIN
+                        </button>
+                        <div class="auto-spin-selector hidden" id="autoSpinSelector">
+                            <div class="text-white text-sm mb-2">Select Spins:</div>
+                            <div>
+                                <button class="auto-spin-option" onclick="setAutoSpins(10)">10</button>
+                                <button class="auto-spin-option" onclick="setAutoSpins(25)">25</button>
+                                <button class="auto-spin-option" onclick="setAutoSpins(50)">50</button>
+                                <button class="auto-spin-option" onclick="setAutoSpins(100)">100</button>
+                            </div>
+                            <button class="mega-button auto-spin-button mt-2" onclick="startAutoSpin()">START</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Result Display -->
+                    <div>
+                        <div class="mega-result-display" id="megaResultDisplay">
+                            🎲 Welcome to Mega Fortune Deluxe!<br>Enhanced with guaranteed wins! 🍀
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stats and Payout Tables -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <!-- Stats Panel -->
+            <div class="stats-panel">
+                <h3 class="text-yellow-400 text-lg font-bold mb-3">📊 Game Stats</h3>
+                <div class="stat-item">
+                    Total Spins: <span class="stat-value" id="totalSpins">0</span>
+                </div>
+                <div class="stat-item">
+                    Total Wins: <span class="stat-value" id="totalWins">0</span>
+                </div>
+                <div class="stat-item">
+                    Biggest Win: <span class="stat-value">$<span id="biggestWin">0</span></span>
+                </div>
+                <div class="stat-item">
+                    Win Rate: <span class="stat-value" id="winRate">0%</span>
+                </div>
+                <div class="stat-item">
+                    Special Bonuses: <span class="stat-value" id="specialBonuses">0</span>
+                </div>
+                <div class="stat-item">
+                    Auto Spins Used: <span class="stat-value" id="autoSpinsUsed">0</span>
+                </div>
+            </div>
+            
+            <!-- Regular Payouts -->
+            <div class="mega-payout-table">
+                <h3 class="text-yellow-400 text-lg font-bold mb-3 text-center">🏆 Enhanced Payouts</h3>
+                <div class="mega-payout-row">
+                    <div class="mega-symbol-display">💎 (12x)</div>
+                    <div class="mega-multiplier">x150</div>
+                </div>
+                <div class="mega-payout-row">
+                    <div class="mega-symbol-display">👑 (10x)</div>
+                    <div class="mega-multiplier">x120</div>
+                </div>
+                <div class="mega-payout-row">
+                    <div class="mega-symbol-display">⭐ (8x)</div>
+                    <div class="mega-multiplier">x90</div>
+                </div>
+                <div class="mega-payout-row">
+                    <div class="mega-symbol-display">🍒 (6x)</div>
+                    <div class="mega-multiplier">x60</div>
+                </div>
+                <div class="mega-payout-row">
+                    <div class="mega-symbol-display">🍋 (5x)</div>
+                    <div class="mega-multiplier">x40</div>
+                </div>
+                <div class="mega-payout-row">
+                    <div class="mega-symbol-display">🍊 (4x)</div>
+                    <div class="mega-multiplier">x25</div>
+                </div>
+                <div class="mega-payout-row">
+                    <div class="mega-symbol-display">🍇 (3x)</div>
+                    <div class="mega-multiplier">x15</div>
+                </div>
+                <div class="mega-payout-row">
+                    <div class="mega-symbol-display">Any 3+ Match</div>
+                    <div class="mega-multiplier">x1-12</div>
+                </div>
+            </div>
+            
+            <!-- Special Payouts -->
+            <div class="mega-payout-table">
+                <h3 class="text-purple-400 text-lg font-bold mb-3 text-center">⚡ MEGA SPECIAL PAYOUTS</h3>
+                <div class="mega-payout-row">
+                    <div class="mega-symbol-display">🌟 (12x)</div>
+                    <div class="mega-special-multiplier">x350</div>
+                </div>
+                <div class="mega-payout-row">
+                    <div class="mega-symbol-display">💫 (10x)</div>
+                    <div class="mega-special-multiplier">x250</div>
+                </div>
+                <div class="mega-payout-row">
+                    <div class="mega-symbol-display">🔥 (8x)</div>
+                    <div class="mega-special-multiplier">x180</div>
+                </div>
+                <div class="mega-payout-row">
+                    <div class="mega-symbol-display">⚡ (6x)</div>
+                    <div class="mega-special-multiplier">x120</div>
+                </div>
+                <div class="mega-payout-row">
+                    <div class="mega-symbol-display">🌈 (5x)</div>
+                    <div class="mega-special-multiplier">x80</div>
+                </div>
+                <div class="mega-payout-row">
+                    <div class="mega-symbol-display">🎆 (4x)</div>
+                    <div class="mega-special-multiplier">x50</div>
+                </div>
+                <br>
+                <div class="text-center text-white text-sm">
+                    <p><strong>BONUS TRIGGER:</strong></p>
+                    <p>Get 5 ⚡ symbols anywhere!</p>
+                    <p>7 FREE MEGA SPINS!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mega Game Over Modal -->
+    <div class="mega-game-over-modal hidden" id="megaGameOverModal">
+        <div class="mega-game-over-content">
+            <h2 class="text-4xl font-bold text-red-500 mb-4">💸 MEGA GAME OVER! 💸</h2>
+            <p class="text-xl text-white mb-4" id="megaMockingMessage"></p>
+            <p class="text-base text-gray-300 mb-6">Even with enhanced payouts, you lost everything!</p>
+            <div class="text-yellow-400 mb-4">
+                <div>Final Stats:</div>
+                <div>Spins: <span id="finalSpins">0</span> | Wins: <span id="finalWins">0</span></div>
+                <div>Biggest Win: $<span id="finalBiggestWin">0</span></div>
+                <div>Auto Spins: <span id="finalAutoSpins">0</span></div>
+            </div>
+            <button class="mega-restart-btn" onclick="restartMegaGame()">
+                🔄 Try Again ($100)
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced Mega Game State
+        let playerMoney = 100;
+        let currentBet = 1;
+        let isSpinning = false;
+        let specialMegaMode = false;
+        let specialMegaSpinsLeft = 0;
+        let totalSpins = 0;
+        let totalWins = 0;
+        let biggestWin = 0;
+        let specialBonuses = 0;
+        let autoSpinsUsed = 0;
+        
+        // Auto Spin Variables
+        let isAutoSpinning = false;
+        let autoSpinsRemaining = 0;
+        let selectedAutoSpins = 10;
+        let autoSpinInterval = null;
+        
+        // Enhanced symbols with better win rates
+        const regularMegaSymbols = [
+            { symbol: '🃏', weight: 25, multiplier: 3 },
+            { symbol: '🎲', weight: 22, multiplier: 5 },
+            { symbol: '🎯', weight: 20, multiplier: 8 },
+            { symbol: '💰', weight: 18, multiplier: 12 },
+            { symbol: '🔔', weight: 16, multiplier: 18 },
+            { symbol: '🍇', weight: 15, multiplier: 15 },
+            { symbol: '🍊', weight: 14, multiplier: 25 },
+            { symbol: '🍋', weight: 12, multiplier: 40 },
+            { symbol: '🍒', weight: 10, multiplier: 60 },
+            { symbol: '⭐', weight: 8, multiplier: 90 },
+            { symbol: '👑', weight: 6, multiplier: 120 },
+            { symbol: '💎', weight: 4, multiplier: 150 },
+            { symbol: '⚡', weight: 12, multiplier: 0 } // Special trigger
+        ];
+        
+        // Enhanced special symbols
+        const specialMegaSymbols = [
+            { symbol: '🎆', multiplier: 50 },
+            { symbol: '🌈', multiplier: 80 },
+            { symbol: '⚡', multiplier: 120 },
+            { symbol: '🔥', multiplier: 180 },
+            { symbol: '💫', multiplier: 250 },
+            { symbol: '🌟', multiplier: 350 }
+        ];
+        
+        // Enhanced mocking messages
+        const megaMockingMessages = [
+            "😂 Auto spin, buy bonus, 12 reels... and STILL broke?!",
+            "🤡 Even with all those features, you couldn't win!",
+            "💸 Your money vanished faster than your dignity!",
+            "😅 Did you think more features = more wins? WRONG!",
+            "🎪 Ladies and gentlemen, the ultimate loser!",
+            "💔 Enhanced payouts and you STILL lost everything!",
+            "🤦‍♂️ I've seen goldfish gamble better than this!",
+            "🎭 That was... impressively catastrophic!",
+            "💀 Your bankroll died despite all the help!",
+            "🙈 Even I can't watch this disaster anymore!",
+            "🎯 You hit the bullseye... of complete failure!",
+            "🌪️ Your money disappeared like magic!",
+            "🎪 Step right up to see the amazing vanishing act!",
+            "💸 Money printer goes brrr... straight to zero!",
+            "🤷‍♂️ Well, that was spectacularly awful!",
+            "😱 Even the enhanced slot machine is embarrassed!",
+            "🎲 You rolled snake eyes on LIFE itself!",
+            "🔥 Your wallet is now officially extinct!",
+            "⚡ Faster than lightning... at losing money!",
+            "🌟 You're a STAR... at being broke!",
+            "💎 The only diamonds you'll see are in this message!",
+            "👑 Congratulations! You're the KING of losing!",
+            "🎊 Let's celebrate your amazing ability to fail!",
+            "🎈 Your hopes just popped like a balloon!",
+            "🛒 You bought bonuses and still went broke!",
+            "🔄 Auto spin couldn't save you from yourself!"
+        ];
+        
+        function createWeightedMegaSymbols() {
+            let weightedSymbols = [];
+            regularMegaSymbols.forEach(item => {
+                for (let i = 0; i < item.weight; i++) {
+                    weightedSymbols.push(item);
+                }
+            });
+            return weightedSymbols;
+        }
+        
+        const weightedMegaSymbols = createWeightedMegaSymbols();
+        
+        function updateMegaMoneyDisplay() {
+            document.getElementById('playerMoney').textContent = playerMoney;
+        }
+        
+        function updateMegaStats() {
+            document.getElementById('totalSpins').textContent = totalSpins;
+            document.getElementById('totalWins').textContent = totalWins;
+            document.getElementById('biggestWin').textContent = biggestWin;
+            document.getElementById('specialBonuses').textContent = specialBonuses;
+            document.getElementById('autoSpinsUsed').textContent = autoSpinsUsed;
+            
+            const winRate = totalSpins > 0 ? Math.round((totalWins / totalSpins) * 100) : 0;
+            document.getElementById('winRate').textContent = winRate + '%';
+        }
+        
+        function setBet(amount) {
+            if (isSpinning || isAutoSpinning) return;
+            
+            // Prevent bet changes during special mode
+            if (specialMegaMode) {
+                showMegaResult('⚡ Cannot change bet during Special Mode!<br>Bet is locked at $1 for fair play!', 'error');
+                return;
+            }
+            
+            if (amount > playerMoney) {
+                showMegaResult('💸 Insufficient funds for this bet!', 'error');
+                return;
+            }
+            
+            currentBet = amount;
+            document.getElementById('currentBet').textContent = amount;
+            
+            // Visual feedback
+            document.querySelectorAll('.mega-bet-chip').forEach(chip => {
+                chip.style.transform = 'scale(1)';
+                chip.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.3)';
+            });
+            
+            event.target.style.transform = 'scale(1.15)';
+            event.target.style.boxShadow = '0 0 30px rgba(255, 215, 0, 0.8), 0 12px 24px rgba(0, 0, 0, 0.4)';
+        }
+        
+
+        
+        function toggleAutoSpin() {
+            if (isSpinning || specialMegaMode) return;
+            
+            const selector = document.getElementById('autoSpinSelector');
+            const button = document.getElementById('autoSpinButton');
+            
+            if (isAutoSpinning) {
+                stopAutoSpin();
+            } else {
+                if (selector.classList.contains('hidden')) {
+                    selector.classList.remove('hidden');
+                    button.textContent = '❌ CANCEL';
+                } else {
+                    selector.classList.add('hidden');
+                    button.textContent = '🔄 AUTO SPIN';
+                }
+            }
+        }
+        
+        function setAutoSpins(amount) {
+            selectedAutoSpins = amount;
+            
+            document.querySelectorAll('.auto-spin-option').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            event.target.classList.add('selected');
+        }
+        
+        function startAutoSpin() {
+            if (playerMoney < currentBet) {
+                showMegaResult('💸 Not enough money for auto spin!', 'error');
+                return;
+            }
+            
+            isAutoSpinning = true;
+            autoSpinsRemaining = selectedAutoSpins;
+            
+            document.getElementById('autoSpinSelector').classList.add('hidden');
+            document.getElementById('autoSpinButton').textContent = '⏹️ STOP AUTO';
+            document.getElementById('autoSpinButton').classList.add('auto-spin-active');
+            document.getElementById('autoSpinIndicator').classList.remove('hidden');
+            document.getElementById('autoSpinsRemaining').textContent = autoSpinsRemaining;
+            
+            showMegaResult(`🔄 Auto Spin started! ${selectedAutoSpins} spins queued.`, 'info');
+            
+            // Start auto spinning
+            autoSpinInterval = setInterval(() => {
+                if (autoSpinsRemaining > 0 && playerMoney >= currentBet && !specialMegaMode) {
+                    spinMegaReels();
+                    autoSpinsRemaining--;
+                    autoSpinsUsed++;
+                    document.getElementById('autoSpinsRemaining').textContent = autoSpinsRemaining;
+                } else {
+                    stopAutoSpin();
+                }
+            }, 3000); // 3 seconds between spins
+        }
+        
+        function stopAutoSpin() {
+            isAutoSpinning = false;
+            autoSpinsRemaining = 0;
+            
+            if (autoSpinInterval) {
+                clearInterval(autoSpinInterval);
+                autoSpinInterval = null;
+            }
+            
+            document.getElementById('autoSpinButton').textContent = '🔄 AUTO SPIN';
+            document.getElementById('autoSpinButton').classList.remove('auto-spin-active');
+            document.getElementById('autoSpinIndicator').classList.add('hidden');
+            
+            updateMegaStats();
+            
+            if (!specialMegaMode) {
+                showMegaResult('⏹️ Auto Spin stopped.', 'info');
+            }
+        }
+        
+        function spinMegaReels() {
+            if (isSpinning) return;
+            
+            if (playerMoney < currentBet && !specialMegaMode) {
+                if (isAutoSpinning) {
+                    stopAutoSpin();
+                }
+                showMegaResult('💸 Not enough money! Auto spin stopped.', 'error');
+                return;
+            }
+            
+            totalSpins++;
+            
+            // Deduct bet (only if not in special mode)
+            if (!specialMegaMode) {
+                playerMoney -= currentBet;
+                updateMegaMoneyDisplay();
+            } else {
+                specialMegaSpinsLeft--;
+                document.getElementById('specialMegaSpinsLeft').textContent = specialMegaSpinsLeft;
+            }
+            
+            isSpinning = true;
+            const spinButton = document.getElementById('megaSpinButton');
+            spinButton.disabled = true;
+            spinButton.textContent = '🎰 SPINNING... 🎰';
+            
+            if (specialMegaMode) {
+                spinButton.classList.add('special-mega-spin-button');
+            }
+            
+            if (!isAutoSpinning) {
+                showMegaResult('🎲 12 mega reels spinning...', 'spinning');
+            }
+            
+            // Get all 12 reels
+            const reels = [];
+            for (let i = 1; i <= 12; i++) {
+                reels.push(document.getElementById(`reel${i}`));
+            }
+            
+            // Clear previous effects
+            reels.forEach(reel => {
+                reel.parentElement.classList.remove('winning-mega-reel');
+                reel.classList.remove('special-mega-reel');
+            });
+            
+            // Start spinning animation
+            reels.forEach(reel => {
+                reel.classList.add('spinning');
+                if (specialMegaMode) {
+                    reel.classList.add('special-mega-reel');
+                }
+            });
+            
+            // Generate results with improved win chances
+            const results = [];
+            for (let i = 0; i < 12; i++) {
+                if (specialMegaMode) {
+                    // Special mode: Reduced win chance
+                    if (Math.random() < 0.12) { // 12% chance for matching symbols (reduced from 25%)
+                        const targetSymbol = specialMegaSymbols[Math.floor(Math.random() * specialMegaSymbols.length)];
+                        results.push(targetSymbol);
+                    } else {
+                        // Random different symbols to reduce matches
+                        results.push(specialMegaSymbols[Math.floor(Math.random() * specialMegaSymbols.length)]);
+                    }
+                } else {
+                    // Improved win logic - better chances with more ⚡ symbols
+                    let symbol;
+                    if (Math.random() < 0.15) { // 15% chance for ⚡ symbols (bonus trigger)
+                        symbol = regularMegaSymbols.find(s => s.symbol === '⚡');
+                    } else if (Math.random() < 0.25) { // 25% chance for better symbols
+                        const betterSymbols = regularMegaSymbols.filter(s => s.multiplier >= 15);
+                        symbol = betterSymbols[Math.floor(Math.random() * betterSymbols.length)];
+                    } else if (Math.random() < 0.45) { // 45% chance for medium symbols
+                        const mediumSymbols = regularMegaSymbols.filter(s => s.multiplier >= 5 && s.multiplier < 15);
+                        symbol = mediumSymbols[Math.floor(Math.random() * mediumSymbols.length)];
+                    } else {
+                        // 30% chance for low value symbols
+                        symbol = weightedMegaSymbols[Math.floor(Math.random() * weightedMegaSymbols.length)];
+                    }
+                    results.push(symbol);
+                }
+            }
+            
+            // Stop reels with staggered timing
+            reels.forEach((reel, index) => {
+                setTimeout(() => {
+                    reel.classList.remove('spinning');
+                    reel.textContent = results[index].symbol;
+                    
+                    if (index === 11) {
+                        setTimeout(() => {
+                            checkMegaWin(results);
+                        }, 400);
+                    }
+                }, (index + 1) * 150);
+            });
+        }
+        
+        function checkMegaWin(results) {
+            let winAmount = 0;
+            let winMessage = '';
+            let isWin = false;
+            
+            // Count occurrences
+            const symbolCounts = {};
+            results.forEach(item => {
+                const symbol = item.symbol;
+                symbolCounts[symbol] = (symbolCounts[symbol] || 0) + 1;
+            });
+            
+            // Check for special trigger (need 5 symbols)
+            if (symbolCounts['⚡'] >= 5 && !specialMegaMode) {
+                triggerMegaSpecialMode();
+                return;
+            }
+            
+            // Check for wins (enhanced logic)
+            let bestWin = { count: 0, symbol: '', multiplier: 0 };
+            
+            for (const [symbol, count] of Object.entries(symbolCounts)) {
+                const symbolData = results.find(item => item.symbol === symbol);
+                
+                if (count >= 3) { // Need at least 3 matching symbols to win
+                    let multiplier = 0;
+                    
+                    // Better multiplier calculation
+                    if (count >= 12) multiplier = Math.floor(symbolData.multiplier * 0.8);
+                    else if (count >= 10) multiplier = Math.floor(symbolData.multiplier * 0.65);
+                    else if (count >= 8) multiplier = Math.floor(symbolData.multiplier * 0.5);
+                    else if (count >= 6) multiplier = Math.floor(symbolData.multiplier * 0.35);
+                    else if (count >= 5) multiplier = Math.floor(symbolData.multiplier * 0.25);
+                    else if (count >= 4) multiplier = Math.floor(symbolData.multiplier * 0.15);
+                    else if (count >= 3) multiplier = Math.floor(symbolData.multiplier * 0.08);
+                    
+                    if (multiplier > bestWin.multiplier) {
+                        bestWin = { count, symbol, multiplier };
+                    }
+                }
+            }
+            
+            if (bestWin.multiplier > 0) {
+                isWin = true;
+                totalWins++;
+                winAmount = currentBet * bestWin.multiplier;
+                
+                if (winAmount > biggestWin) {
+                    biggestWin = winAmount;
+                }
+                
+                if (specialMegaMode) {
+                    winMessage = `🌟 MEGA SPECIAL WIN! 🌟<br>${bestWin.symbol} x${bestWin.count} = ${bestWin.multiplier}x!<br>Won: $${winAmount}`;
+                    createMegaSpecialParticles();
+                } else {
+                    if (bestWin.count >= 10) {
+                        winMessage = `🎉 MEGA JACKPOT! 🎉<br>${bestWin.symbol} x${bestWin.count} = ${bestWin.multiplier}x!<br>Won: $${winAmount}`;
+                    } else if (bestWin.count >= 6) {
+                        winMessage = `✨ SUPER WIN! ✨<br>${bestWin.symbol} x${bestWin.count} = ${bestWin.multiplier}x!<br>Won: $${winAmount}`;
+                    } else {
+                        winMessage = `🎯 NICE WIN! 🎯<br>${bestWin.symbol} x${bestWin.count} = ${bestWin.multiplier}x!<br>Won: $${winAmount}`;
+                    }
+                    createMegaParticles();
+                }
+                
+                playerMoney += winAmount;
+                updateMegaMoneyDisplay();
+                highlightMegaWinningReels();
+            }
+            
+            if (!isWin) {
+                if (specialMegaMode) {
+                    winMessage = '😔 No mega match, but special spins continue!';
+                } else if (isAutoSpinning) {
+                    winMessage = `🔄 Auto Spin: ${autoSpinsRemaining} remaining`;
+                } else {
+                    winMessage = '😔 No match. Try again!';
+                }
+            }
+            
+            if (!isAutoSpinning || isWin) {
+                showMegaResult(winMessage, isWin ? 'win' : 'lose');
+            }
+            
+            updateMegaStats();
+            
+            // Check if special mode should end
+            if (specialMegaMode && specialMegaSpinsLeft <= 0) {
+                endMegaSpecialMode();
+            }
+            
+            // Re-enable controls
+            setTimeout(() => {
+                isSpinning = false;
+                const spinButton = document.getElementById('megaSpinButton');
+                spinButton.disabled = false;
+                spinButton.textContent = specialMegaMode ? '⚡ MEGA SPECIAL! ⚡' : '🎰 MEGA SPIN! 🎰';
+                
+                // Check if player is broke
+                if (playerMoney <= 0 && !specialMegaMode && !isAutoSpinning) {
+                    setTimeout(() => {
+                        megaGameOver();
+                    }, 1000);
+                } else if (playerMoney < currentBet && isAutoSpinning && !specialMegaMode) {
+                    stopAutoSpin();
+                }
+            }, isAutoSpinning ? 1500 : 3000);
+        }
+        
+        function triggerMegaSpecialMode() {
+            if (isAutoSpinning) {
+                stopAutoSpin();
+            }
+            
+            specialMegaMode = true;
+            specialMegaSpinsLeft = 7;
+            specialBonuses++;
+            
+            // Force bet to $1 during special mode
+            currentBet = 1;
+            document.getElementById('currentBet').textContent = '1';
+            
+            // Disable all bet chips during special mode
+            document.querySelectorAll('.mega-bet-chip').forEach(chip => {
+                chip.style.opacity = '0.5';
+                chip.style.pointerEvents = 'none';
+                chip.style.cursor = 'not-allowed';
+            });
+            
+            // Update UI
+            document.getElementById('specialMegaModeIndicator').classList.remove('hidden');
+            document.getElementById('specialMegaSpinsLeft').textContent = specialMegaSpinsLeft;
+            document.getElementById('megaSlotMachine').classList.add('special-mega-mode');
+            
+            const reels = document.querySelectorAll('.mega-reel');
+            reels.forEach(reel => {
+                reel.classList.add('special-mega-reel');
+            });
+            
+            showMegaResult('⚡🌟 MEGA SPECIAL BONUS! 🌟⚡<br>7 FREE SPINS with MASSIVE MULTIPLIERS!<br>Bet locked at $1 for fair play!', 'special');
+            createMegaSpecialParticles();
+            
+            setTimeout(() => {
+                isSpinning = false;
+                const spinButton = document.getElementById('megaSpinButton');
+                spinButton.disabled = false;
+                spinButton.textContent = '⚡ MEGA SPECIAL! ⚡';
+                spinButton.classList.add('special-mega-spin-button');
+            }, 3000);
+        }
+        
+        function endMegaSpecialMode() {
+            specialMegaMode = false;
+            
+            // Re-enable all bet chips after special mode
+            document.querySelectorAll('.mega-bet-chip').forEach(chip => {
+                chip.style.opacity = '1';
+                chip.style.pointerEvents = 'auto';
+                chip.style.cursor = 'pointer';
+            });
+            
+            document.getElementById('specialMegaModeIndicator').classList.add('hidden');
+            document.getElementById('megaSlotMachine').classList.remove('special-mega-mode');
+            
+            const reels = document.querySelectorAll('.mega-reel');
+            reels.forEach(reel => {
+                reel.classList.remove('special-mega-reel');
+            });
+            
+            const spinButton = document.getElementById('megaSpinButton');
+            spinButton.classList.remove('special-mega-spin-button');
+            
+            showMegaResult('🎊 Mega Special Complete! 🎊<br>Back to enhanced regular spins!<br>You can now change your bet again!', 'info');
+        }
+        
+        function highlightMegaWinningReels() {
+            const reels = document.querySelectorAll('.mega-reel-container');
+            reels.forEach(reel => {
+                reel.classList.add('winning-mega-reel');
+            });
+            
+            setTimeout(() => {
+                reels.forEach(reel => {
+                    reel.classList.remove('winning-mega-reel');
+                });
+            }, 3000);
+        }
+        
+        function showMegaResult(message, type) {
+            const resultDisplay = document.getElementById('megaResultDisplay');
+            resultDisplay.innerHTML = message;
+            
+            resultDisplay.classList.remove('mega-jackpot-animation');
+            
+            if (type === 'win') {
+                resultDisplay.style.color = '#22c55e';
+                if (message.includes('JACKPOT') || message.includes('MEGA SPECIAL WIN')) {
+                    resultDisplay.classList.add('mega-jackpot-animation');
+                }
+            } else if (type === 'special') {
+                resultDisplay.style.color = '#ff00ff';
+                resultDisplay.classList.add('mega-jackpot-animation');
+            } else if (type === 'error') {
+                resultDisplay.style.color = '#ef4444';
+            } else if (type === 'lose') {
+                resultDisplay.style.color = '#f59e0b';
+            } else {
+                resultDisplay.style.color = 'white';
+            }
+        }
+        
+        function createMegaParticles() {
+            const particlesContainer = document.getElementById('megaParticles');
+            
+            for (let i = 0; i < 40; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'mega-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                particle.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                
+                particlesContainer.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, 5000);
+            }
+        }
+        
+        function createMegaSpecialParticles() {
+            const particlesContainer = document.getElementById('megaParticles');
+            
+            for (let i = 0; i < 60; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'mega-particle mega-special-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 1.5 + 's';
+                particle.style.animationDuration = (Math.random() * 1.5 + 2) + 's';
+                
+                particlesContainer.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, 4000);
+            }
+        }
+        
+        function megaGameOver() {
+            if (isAutoSpinning) {
+                stopAutoSpin();
+            }
+            
+            const mockingMessage = megaMockingMessages[Math.floor(Math.random() * megaMockingMessages.length)];
+            document.getElementById('megaMockingMessage').textContent = mockingMessage;
+            
+            document.getElementById('finalSpins').textContent = totalSpins;
+            document.getElementById('finalWins').textContent = totalWins;
+            document.getElementById('finalBiggestWin').textContent = biggestWin;
+            document.getElementById('finalAutoSpins').textContent = autoSpinsUsed;
+            
+            document.getElementById('megaGameOverModal').classList.remove('hidden');
+        }
+        
+        function restartMegaGame() {
+            playerMoney = 100;
+            currentBet = 1;
+            specialMegaMode = false;
+            specialMegaSpinsLeft = 0;
+            totalSpins = 0;
+            totalWins = 0;
+            biggestWin = 0;
+            specialBonuses = 0;
+            autoSpinsUsed = 0;
+            isAutoSpinning = false;
+            autoSpinsRemaining = 0;
+            selectedAutoSpins = 10;
+            
+            if (autoSpinInterval) {
+                clearInterval(autoSpinInterval);
+                autoSpinInterval = null;
+            }
+            
+            // Re-enable all bet chips
+            document.querySelectorAll('.mega-bet-chip').forEach(chip => {
+                chip.style.opacity = '1';
+                chip.style.pointerEvents = 'auto';
+                chip.style.cursor = 'pointer';
+                chip.style.transform = 'scale(1)';
+                chip.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.3)';
+            });
+            
+            updateMegaMoneyDisplay();
+            updateMegaStats();
+            document.getElementById('currentBet').textContent = '1';
+            document.getElementById('megaGameOverModal').classList.add('hidden');
+            document.getElementById('specialMegaModeIndicator').classList.add('hidden');
+            document.getElementById('autoSpinIndicator').classList.add('hidden');
+            document.getElementById('autoSpinSelector').classList.add('hidden');
+            document.getElementById('megaSlotMachine').classList.remove('special-mega-mode');
+            
+            // Reset buttons
+            document.getElementById('autoSpinButton').textContent = '🔄 AUTO SPIN';
+            document.getElementById('autoSpinButton').classList.remove('auto-spin-active');
+            
+            // Reset reels
+            const initialSymbols = ['🍒', '🍋', '🍊', '🍇', '⭐', '🔔', '💰', '🎯', '🎲', '🃏', '👑', '💎'];
+            for (let i = 1; i <= 12; i++) {
+                const reel = document.getElementById(`reel${i}`);
+                reel.classList.remove('special-mega-reel');
+                reel.textContent = initialSymbols[i - 1];
+            }
+            
+            const spinButton = document.getElementById('megaSpinButton');
+            spinButton.classList.remove('special-mega-spin-button');
+            spinButton.textContent = '🎰 MEGA SPIN! 🎰';
+            
+            showMegaResult('🎲 Welcome back to Mega Fortune Deluxe!<br>Get 5 ⚡ symbols for MEGA BONUS! 🍀<br>Win with just 3 matching symbols!', 'info');
+        }
+        
+        // Initialize game
+        updateMegaMoneyDisplay();
+        updateMegaStats();
+        
+        // Show welcome message
+        showMegaResult('🎲 Welcome to Mega Fortune Deluxe!<br>Get 5 ⚡ symbols for MEGA BONUS! 🍀<br>Win with just 3 matching symbols!', 'info');
+        
+        // Particle effects
+        setTimeout(() => {
+            createMegaParticles();
+        }, 1000);
+        
+        setInterval(() => {
+            if (Math.random() < 0.3) {
+                createMegaParticles();
+            }
+        }, 5000);
+        
+        setInterval(() => {
+            if (Math.random() < 0.15) {
+                createMegaSpecialParticles();
+            }
+        }, 10000);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96e6eebcc64e732e',t:'MTc1NTA3NDY4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
